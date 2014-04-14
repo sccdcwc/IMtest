@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0975E30A-7A3F-4B79-B880-D9C6A4232238}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IM</RootNamespace>
+    <AssemblyName>IM</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="IDBAccess, Version=1.0.0.4, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\IDBAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="IrisSkin2, Version=2006.3.22.45, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="MyIM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MyIM\bin\Debug\MyIM.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="SideBar, Version=1.0.2813.28543, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="SkinForm">
+      <HintPath>..\..\..\IMEducationPlatform\IMEducationPlatform\bin\Debug\SkinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddGroup.Designer.cs">
+      <DependentUpon>AddGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BLL\BaseDB.cs" />
+    <Compile Include="BLL\UserBLL.cs" />
+    <Compile Include="ChangeAlternateName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeAlternateName.Designer.cs">
+      <DependentUpon>ChangeAlternateName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Createclass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Createclass.Designer.cs">
+      <DependentUpon>Createclass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeleteGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeleteGroup.Designer.cs">
+      <DependentUpon>DeleteGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChat.Designer.cs">
+      <DependentUpon>frmChat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmClassroom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmClassroom.Designer.cs">
+      <DependentUpon>frmClassroom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="main.Designer.cs">
+      <DependentUpon>main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="recievefile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="recievefile.Designer.cs">
+      <DependentUpon>recievefile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="regist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="regist.Designer.cs">
+      <DependentUpon>regist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReNameGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReNameGroup.Designer.cs">
+      <DependentUpon>ReNameGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="search_student.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="search_student.Designer.cs">
+      <DependentUpon>search_student.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Search_teacher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Search_teacher.Designer.cs">
+      <DependentUpon>Search_teacher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="sendfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="sendfile.Designer.cs">
+      <DependentUpon>sendfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="teachermanager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="teachermanager.Designer.cs">
+      <DependentUpon>teachermanager.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AddGroup.resx">
+      <DependentUpon>AddGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeAlternateName.resx">
+      <DependentUpon>ChangeAlternateName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Createclass.resx">
+      <DependentUpon>Createclass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeleteGroup.resx">
+      <DependentUpon>DeleteGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChat.resx">
+      <DependentUpon>frmChat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmClassroom.resx">
+      <DependentUpon>frmClassroom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="main.resx">
+      <DependentUpon>main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="recievefile.resx">
+      <DependentUpon>recievefile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="regist.resx">
+      <DependentUpon>regist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReNameGroup.resx">
+      <DependentUpon>ReNameGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="search_student.resx">
+      <DependentUpon>search_student.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Search_teacher.resx">
+      <DependentUpon>Search_teacher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sendfile.resx">
+      <DependentUpon>sendfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="teachermanager.resx">
+      <DependentUpon>teachermanager.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Login_标题.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\企鹅图标.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\regist_背景 .jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\regist_企鹅.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\regist_企鹅1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\teachermanager_背景.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\teachermanager_头像.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search_teacher.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\title_createclass.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_quickbar_face.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_quickbar_font.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_quickbar_math.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aio_quickbar_sendpic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background_board.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCommunicate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnHelp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSpeech.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnTeach.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_add.GIF" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_chatHistory.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_delete.GIF" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_eraser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_indicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_pen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_rectangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_save.GIF" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_speech.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_video.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_writeBoard.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
