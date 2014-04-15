@@ -54,6 +54,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ClassSerializers.cs" />
+    <Compile Include="ClassStruct.cs" />
     <Compile Include="ClassUserInfo.cs" />
     <Compile Include="ClassUsers.cs" />
     <Compile Include="ClassXml.cs" />

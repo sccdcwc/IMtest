@@ -137,7 +137,7 @@
             // 
             this.udpSocket1.Active = false;
             this.udpSocket1.LocalHost = "127.0.0.1";
-            this.udpSocket1.LocalPort = 11000;
+            this.udpSocket1.LocalPort = 11001;
             // 
             // F_Server
             // 

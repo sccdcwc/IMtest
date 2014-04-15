@@ -11,6 +11,8 @@ using MySql.Data;
 using IM.BLL;
 using CCWin.SkinControl;
 using System.IO;
+using MyIM;
+using System.Net;
 
 
 namespace IM
@@ -18,11 +20,42 @@ namespace IM
     public partial class main : Form
     {
         public string s = "C://Users//Administrator//Documents//IM_Documents";
+
+        string serIP = "192.168.1.187";
+
         public main()
         {
             InitializeComponent();
+            udpSocket1.Active = true;
+            udpSocket1.DataArrival+=new UDPSocket.DataArrivalEventHandler(this.DataArrival);
         }
 
+        private void socketUDP1_DataArrival(byte[] Data, IPAddress ip, int port)
+        {
+            DataArrivaldelegate outdelegate = new DataArrivaldelegate(DataArrival);
+            this.BeginInvoke(outdelegate, new object[] { Data, ip, port });
+        }
+        private delegate void DataArrivaldelegate(byte[] Data, System.Net.IPAddress Ip, int Port);
+
+        private void DataArrival(byte[] Data, IPAddress ip, int port)
+        {
+            ClassMsg msg = new ClassSerializers().DeSerializeBinary((new MemoryStream(Data))) as ClassMsg;
+            switch (msg.sendKind)
+            {
+                case SendKind.SendCommand:
+                    {
+                        switch (msg.msgCommand)
+                        {
+                            case MsgCommand.GetFriendList:
+                                ShowFriendList(msg);
+                                break;
+                        }
+
+                        break;
+                    }
+
+            }
+        }
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             search_student sstu = new search_student();
@@ -44,63 +77,104 @@ namespace IM
         {
 
             UserBLL udb = new UserBLL();
-            //用户信息表
-            DataTable dt = new DataTable();
-            //好友表
-            DataTable dt1 = new DataTable();
-            //分组信息表
-            DataTable dt2 = new DataTable();
-            //好友详细信息表
-            DataTable dt3 = new DataTable();
-            dt = udb.Userinfo(udb.user.UserID);
-            Name_skinLable.Text = udb.user.UserNickName;
-            PersonalMessage.Text = udb.user.UserPersonalMessage;
-            chatListBox1.Items.Clear();
-            dt2 = udb.DB.GetData(string.Format("select * from friendgroup where userID={0}", udb.user.UserID));
-            if (string.IsNullOrEmpty(dt.Rows[0]["HeadPicture"].ToString()))
-            {
-                headpicture.ImageLocation = s + "\\search_teacher.jpg";
-            }
-            else
-            {
-                headpicture.ImageLocation = dt.Rows[0]["HeadPicture"].ToString();
-            }
-            for (int i = 0; i < dt2.Rows.Count; i++)
-            {
+            ClassMsg msg = new ClassMsg();
+            LoginMsg loginmsg = new LoginMsg();
+            msg.sendKind = SendKind.SendCommand;
+            msg.msgCommand = MsgCommand.GetFriendList;
+            msg.SID = udb.user.UserID.ToString();
+            loginmsg.UserName = udb.user.UserName;
+            byte[] loginbyte = new ClassSerializers().SerializeBinary(loginmsg).ToArray();
+            msg.Data = loginbyte;
+            udpSocket1.Send(IPAddress.Parse(serIP),10001,new ClassSerializers().SerializeBinary(msg).ToArray());
+            ////用户信息表
+            //DataTable dt = new DataTable();
+            ////好友表
+            //DataTable dt1 = new DataTable();
+            ////分组信息表
+            //DataTable dt2 = new DataTable();
+            ////好友详细信息表
+            //DataTable dt3 = new DataTable();
+            //dt = udb.Userinfo(udb.user.UserID);
+            //Name_skinLable.Text = udb.user.UserNickName;
+            //PersonalMessage.Text = udb.user.UserPersonalMessage;
+            //chatListBox1.Items.Clear();
+            //dt2 = udb.DB.GetData(string.Format("select * from friendgroup where userID={0}", udb.user.UserID));
+            //if (string.IsNullOrEmpty(dt.Rows[0]["HeadPicture"].ToString()))
+            //{
+            //    headpicture.ImageLocation = s + "\\search_teacher.jpg";
+            //}
+            //else
+            //{
+            //    headpicture.ImageLocation = dt.Rows[0]["HeadPicture"].ToString();
+            //}
+            //for (int i = 0; i < dt2.Rows.Count; i++)
+            //{
+            //    ChatListItem chatlist1 = new ChatListItem();
+            //    chatlist1.Bounds = new System.Drawing.Rectangle(0, 53, 363, 25);
+            //    chatlist1.IsTwinkleHide = false;
+            //    chatlist1.OwnerChatListBox = this.chatListBox1;
+            //    chatlist1.Text = dt2.Rows[i]["GrouName"].ToString();
+            //    chatlist1.TwinkleSubItemNumber = 0;
+            //    chatListBox1.Items.AddRange(new ChatListItem[] { chatlist1 });
+            //    dt1 = udb.GetFriendList(udb.user.UserName, dt2.Rows[i]["GrouID"].ToString());
+            //    for (int l = 0; l < dt1.Rows.Count; l++)
+            //    {
+            //        dt3 = udb.DB.GetData(string.Format("select * from user where UserID={0}", dt1.Rows[l]["Use_UserID"]));
+            //        ChatListSubItem chatListSubItem1 = new ChatListSubItem();
+            //        chatListSubItem1.Bounds = new System.Drawing.Rectangle(0, 0, 0, 0);
+            //        chatListSubItem1.DisplayName = dt1.Rows[l]["Alternatename"].ToString();
+            //        chatListSubItem1.HeadImage = null;
+            //        chatListSubItem1.HeadRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            //        chatListSubItem1.ID = Convert.ToInt32(dt1.Rows[l]["Use_UserID"]);
+            //        chatListSubItem1.IpAddress = null;
+            //        chatListSubItem1.IsTwinkle = false;
+            //        chatListSubItem1.IsTwinkleHide = false;
+            //        chatListSubItem1.NicName = dt3.Rows[0]["UserNickName"].ToString();
+            //        chatListSubItem1.OwnerListItem = chatlist1;
+            //        chatListSubItem1.PersonalMsg = dt3.Rows[0]["UserPersonalMessage"].ToString();
+            //        chatListSubItem1.Status = ChatListSubItem.UserStatus.Online;
+            //        chatListSubItem1.Tag = null;
+            //        chatListSubItem1.TcpPort = 0;
+            //        chatListSubItem1.UpdPort = 0;
+            //        chatlist1.SubItems.AddRange(new ChatListSubItem[] {chatListSubItem1});
+            //    }
+            //}
+        }
+        private void ShowFriendList(ClassMsg msg)
+        {
+            LoginMsg loginmsg = (LoginMsg)new ClassSerializers().DeSerializeBinary(new MemoryStream(msg.Data));
+            int i=0;
+            foreach (var item in loginmsg.FriendList.Group)
+	        {
                 ChatListItem chatlist1 = new ChatListItem();
                 chatlist1.Bounds = new System.Drawing.Rectangle(0, 53, 363, 25);
                 chatlist1.IsTwinkleHide = false;
                 chatlist1.OwnerChatListBox = this.chatListBox1;
-                chatlist1.Text = dt2.Rows[i]["GrouName"].ToString();
+                chatlist1.Text = item.GroupName;
                 chatlist1.TwinkleSubItemNumber = 0;
                 chatListBox1.Items.AddRange(new ChatListItem[] { chatlist1 });
-                dt1 = udb.GetFriendList(udb.user.UserName, dt2.Rows[i]["GrouID"].ToString());
-                for (int l = 0; l < dt1.Rows.Count; l++)
+                foreach(var item1 in loginmsg.FriendList.Group[i].Friend)
                 {
-                    dt3 = udb.DB.GetData(string.Format("select * from user where UserID={0}", dt1.Rows[l]["Use_UserID"]));
-                    ChatListSubItem chatListSubItem1 = new ChatListSubItem();
-                    chatListSubItem1.Bounds = new System.Drawing.Rectangle(0, 0, 0, 0);
-                    chatListSubItem1.DisplayName = dt1.Rows[l]["Alternatename"].ToString();
-                    chatListSubItem1.HeadImage = null;
-                    chatListSubItem1.HeadRect = new System.Drawing.Rectangle(0, 0, 0, 0);
-                    chatListSubItem1.ID = Convert.ToInt32(dt1.Rows[l]["Use_UserID"]);
-                    chatListSubItem1.IpAddress = null;
-                    chatListSubItem1.IsTwinkle = false;
-                    chatListSubItem1.IsTwinkleHide = false;
-                    chatListSubItem1.NicName = dt3.Rows[0]["UserNickName"].ToString();
-                    chatListSubItem1.OwnerListItem = chatlist1;
-                    chatListSubItem1.PersonalMsg = dt3.Rows[0]["UserPersonalMessage"].ToString();
-                    chatListSubItem1.Status = ChatListSubItem.UserStatus.Online;
-                    chatListSubItem1.Tag = null;
-                    chatListSubItem1.TcpPort = 0;
-                    chatListSubItem1.UpdPort = 0;
-                    chatlist1.SubItems.AddRange(new ChatListSubItem[] {
-            chatListSubItem1});
+                     ChatListSubItem chatListSubItem1 = new ChatListSubItem();
+                chatListSubItem1.Bounds = new System.Drawing.Rectangle(0, 0, 0, 0);
+                chatListSubItem1.DisplayName = item1.AlternateName;
+                chatListSubItem1.HeadImage = null;
+                chatListSubItem1.HeadRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+                chatListSubItem1.ID = Convert.ToInt32(item1.UserID);
+                chatListSubItem1.IpAddress = null;
+                chatListSubItem1.IsTwinkle = false;
+                chatListSubItem1.IsTwinkleHide = false;
+                chatListSubItem1.NicName = item1.NickName;
+                chatListSubItem1.OwnerListItem = chatlist1;
+                chatListSubItem1.PersonalMsg = item1.UserPersonalMessage;
+                chatListSubItem1.Status = ChatListSubItem.UserStatus.Online;
+                chatListSubItem1.Tag = null;
+                chatListSubItem1.TcpPort = 0;
+                chatListSubItem1.UpdPort = 0;
+                chatlist1.SubItems.AddRange(new ChatListSubItem[] { chatListSubItem1 });
                 }
-            }
-
-
-
+                i++;
+	        }
         }
 
         private void chatListBox_DoubleClickSubItem(object sender, CCWin.SkinControl.ChatListEventArgs e)
@@ -209,7 +283,7 @@ namespace IM
 
                 FileInfo pic = new FileInfo(openfile.FileName);
                 string dz = s + "//" + pic.Name;
-                pic.CopyTo(dz,true);
+                pic.CopyTo(dz, true);
                 bSuccess = udb.ChangeHeadPicture(dz, udb.user.UserID.ToString());
             }
             if (bSuccess)

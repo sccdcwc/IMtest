@@ -42,8 +42,7 @@
       <HintPath>bin\Debug\IDBAccess.dll</HintPath>
     </Reference>
     <Reference Include="IrisSkin2, Version=2006.3.22.45, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="MyIM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MyIM">
       <HintPath>..\MyIM\bin\Debug\MyIM.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />

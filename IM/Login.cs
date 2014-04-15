@@ -20,21 +20,38 @@ namespace IM
         private bool bSuccess = false;
         public string[] str = { "", "", "", "" };
         //string s = "C://Users//Administrator//Documents//IM_Documents";
-        bool IsChange = false;
-        string sFirstName = string.Empty;
-        string xmlpath = "C://Users//Administrator//Documents//IM_Documents//IMinfo.xml";
+        bool IsChange = false;                           //这个值判断是remain_password的checked值得改变是否需要写人xml
+        string sFirstName = string.Empty;                //记录上次登录的用户名       
+        string xmlpath = "C://Users//Administrator//Documents//IM_Documents//IMinfo.xml";      //本地xml文件的地址
+
         Publec_Class pubec_class = new Publec_Class();
         ClassXml xml = new ClassXml();
+        UserBLL User = new UserBLL();
+        #region 登录委托
+        /// <summary>
+        /// 登录委托
+        /// </summary>
+        public delegate void LoginToMain();
 
+        public void D_login()
+        {
+            LoginToMain LTM = new LoginToMain(MainForm);
+            this.Invoke(LTM);
+        }
+        #endregion
+
+        #region xml读写dll引用
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
 
         [DllImport("kernel32")]
         private static extern long GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+        #endregion
 
         public Login()
         {
             InitializeComponent();
+            udpSocket1.Active = true;
             udpSocket1.DataArrival += new UDPSocket.DataArrivalEventHandler(this.DataArrival);
         }
         #region 监听
@@ -58,9 +75,9 @@ namespace IM
                                 MessageBox.Show("登录失败，用户名密码错误!");
                                 break;
                             case MsgCommand.Logined:
-                                main mai = new main();
-                                mai.Show();
-                                this.Hide();
+                                User.user.UserID = Convert.ToInt16(msg.SID);
+                                D_login();
+                                udpSocket1.Active = false;
                                 break;
                         }
 
@@ -70,6 +87,15 @@ namespace IM
             }
         }
         #endregion
+        /// <summary>
+        /// 创建主窗口
+        /// </summary>
+        private void MainForm()
+        {
+            main mai = new main();
+            mai.Show();
+            this.Hide();
+        }
         /// <summary>
         /// 注册用户
         /// </summary>
@@ -176,9 +202,14 @@ namespace IM
         {
             this.Hide();
         }
+        /// <summary>
+        /// 退出操作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            xml.ChangeAttribute(xml.GetNode(Username_textbox.Text, "UserList/UserInfo", xmlpath), "UserList/UserInfo", "IsLast", "true", xmlpath);
+            xml.ChangeAttribute(xml.GetNode(sFirstName, "UserList/UserInfo", xmlpath), "UserList/UserInfo", "IsLast", "true", xmlpath);// 若无登录操作则将依然使当前的用户为最近登录用户
             Close();
         }
 
@@ -251,7 +282,7 @@ namespace IM
         {
             string hostname = string.Empty;
             string serID = string.Empty;
-            UserBLL User = new UserBLL();
+
             User.user.UserName = Username_textbox.Text;
             User.user.PassWord1 = Password_textbox.Text;
             //string[] sMessage = { "", "" };
@@ -274,7 +305,7 @@ namespace IM
             msg.msgCommand = MsgCommand.Logining;
             msg.Data = logindata;
             serID = "192.168.1.187";                 //服务器IP
-            udpSocket1.Send(IPAddress.Parse(serID), 11000, new ClassSerializers().SerializeBinary(msg).ToArray());
+            udpSocket1.Send(IPAddress.Parse(serID), 11001, new ClassSerializers().SerializeBinary(msg).ToArray());
             #endregion
 
             //}

@@ -48,8 +48,8 @@
             this.skinToolStrip1 = new CCWin.SkinControl.SkinToolStrip();
             this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton3 = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSplitButton4 = new System.Windows.Forms.ToolStripSplitButton();
+            this.toolStripSplitButton3 = new System.Windows.Forms.ToolStripSplitButton();
             this.Apply_tabPage = new System.Windows.Forms.TabPage();
             this.Notify_tabPage = new System.Windows.Forms.TabPage();
             this.Research_tabPage = new System.Windows.Forms.TabPage();
@@ -66,6 +66,7 @@
             this.skinToolStrip2 = new CCWin.SkinControl.SkinToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.udpSocket1 = new MyIM.UDPSocket(this.components);
             this.Usermenu.SuspendLayout();
             this.contextMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -281,15 +282,6 @@
             this.toolStripSplitButton2.Size = new System.Drawing.Size(91, 24);
             this.toolStripSplitButton2.Text = "群\\讨论组";
             // 
-            // toolStripSplitButton3
-            // 
-            this.toolStripSplitButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripSplitButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton3.Image")));
-            this.toolStripSplitButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton3.Name = "toolStripSplitButton3";
-            this.toolStripSplitButton3.Size = new System.Drawing.Size(55, 24);
-            this.toolStripSplitButton3.Text = "会话";
-            // 
             // toolStripSplitButton4
             // 
             this.toolStripSplitButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -298,6 +290,15 @@
             this.toolStripSplitButton4.Name = "toolStripSplitButton4";
             this.toolStripSplitButton4.Size = new System.Drawing.Size(85, 24);
             this.toolStripSplitButton4.Text = "我的课堂";
+            // 
+            // toolStripSplitButton3
+            // 
+            this.toolStripSplitButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripSplitButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton3.Image")));
+            this.toolStripSplitButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton3.Name = "toolStripSplitButton3";
+            this.toolStripSplitButton3.Size = new System.Drawing.Size(55, 24);
+            this.toolStripSplitButton3.Text = "会话";
             // 
             // Apply_tabPage
             // 
@@ -510,6 +511,12 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // udpSocket1
+            // 
+            this.udpSocket1.Active = false;
+            this.udpSocket1.LocalHost = "127.0.0.1";
+            this.udpSocket1.LocalPort = 11000;
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -579,6 +586,7 @@
         private CCWin.SkinControl.SkinLabel PersonalMessage;
         private System.Windows.Forms.ToolStripMenuItem 刷新好友列表ToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private MyIM.UDPSocket udpSocket1;
 
     }
 }

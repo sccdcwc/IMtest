@@ -31,3 +31,6 @@ D:\学习测试程序\新建文件夹\IM\IM_Server\obj\x86\Debug\IM_Server.Prope
 D:\学习测试程序\新建文件夹\IM\IM_Server\obj\x86\Debug\IM_Server.csproj.GenerateResource.Cache
 D:\学习测试程序\新建文件夹\IM\IM_Server\obj\x86\Debug\IM_Server.exe
 D:\学习测试程序\新建文件夹\IM\IM_Server\obj\x86\Debug\IM_Server.pdb
+D:\学习测试程序\IM\IM_Server\bin\Debug\MyIM.dll
+D:\学习测试程序\IM\IM_Server\bin\Debug\IDBAccess.dll
+D:\学习测试程序\IM\IM_Server\bin\Debug\MyIM.pdb

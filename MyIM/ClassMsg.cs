@@ -4,7 +4,7 @@
 namespace MyIM
 {
     /// <summary>
-    /// 
+    /// 消息
     /// </summary>
     [Serializable]
     public class ClassMsg
@@ -117,7 +117,12 @@ namespace MyIM
         /// <summary>
         /// 下线
         /// </summary>
-        Close
+        Close,
+        /// <summary>
+        /// 获取好友列表
+        /// </summary>
+        GetFriendList
+
     }
     #endregion
 
@@ -188,15 +193,13 @@ namespace MyIM
     }
     #endregion
 
-    #region 登录反馈信息
+    #region 登录信息
     [Serializable]
     public class LoginMsg
     {
         public string UserName;
         public string PassWord;
-        public bool IsSuccess = false;
-        public bool HasUser = false;
-        public bool IsPassRight = false;
+        public FriendList FriendList;
     }
     #endregion
 }

@@ -20,13 +20,14 @@ namespace IM_Server
     /// </sumsmary>
     /// <param name="?"></param>
     public delegate void LoadCurrUserList();
-    
+
     public partial class F_Server : Form
     {
+        ClassOptionData OptionData = new ClassOptionData();
         public F_Server()
         {
             InitializeComponent();
-            udpSocket1.DataArrival+=new UDPSocket.DataArrivalEventHandler(this.DataArrival);
+            udpSocket1.DataArrival += new UDPSocket.DataArrivalEventHandler(this.DataArrival);
         }
 
         public void LoadUsrLst()
@@ -106,7 +107,7 @@ namespace IM_Server
             {
                 ((ToolStripMenuItem)sender).Text = "结束服务";
                 udpSocket1.Active = true;
-                
+
             }
             else
             {
@@ -148,6 +149,9 @@ namespace IM_Server
                                 case MsgCommand.UserList://用户列表
                                     SendUserList(msg, ip, port);
                                     break;
+                                case MsgCommand.GetFriendList://获取好友列表
+                                    SendFriendList(msg, ip, port);
+                                    break;
                                 case MsgCommand.SendToOne://发送消息给单用户
                                     SendUserMsg(msg, ip, port);
                                     break;
@@ -178,6 +182,46 @@ namespace IM_Server
                 MessageBox.Show(e.Message);
             }
         }
+
+        private void SendFriendList(ClassMsg msg, IPAddress ip, int port)
+        {
+            LoginMsg loginmsg = (LoginMsg)new ClassSerializers().DeSerializeBinary(new MemoryStream(msg.Data));
+            MsgCommand msgState = msg.msgCommand;
+            string UserName = loginmsg.UserName;    //登录用户名称
+            string vIP = ip.ToString();             //用户IP地址
+            FriendList FriendList = new MyIM.FriendList();
+            DataTable dt = OptionData.ExSQLReDr("select * from user Where UserAccount=" + "'" + UserName + "'");
+            string UserID = dt.Rows[0]["UserID"].ToString();
+            DataTable dt1 = OptionData.ExSQLReDr(string.Format("select * from friendgroup where UserID={0}", UserID));
+            for (int i = 0; i < dt1.Rows.Count; i++)
+            {
+                DataRow dtr = dt1.NewRow();
+                dtr = dt1.Rows[i];
+                FriendList.Group[i].GroupName = dtr["GrouName"].ToString();
+                FriendList.Group[i].GroupID = dtr["GrouID"].ToString();
+                DataTable dt2 = OptionData.ExSQLReDr("select GrouID,Use_UserID,AlternateName,frs.UserID from friendrelationship frs"
+                + " join user user on frs.UserID=user.UserID"
+                + string.Format(" where user.UserAccount='{0}' and frs.GrouID='{1}'", UserName, FriendList.Group[i].GroupID)
+                + " order by GrouID");
+                for (int l = 0; l < dt2.Rows.Count; l++)
+                {
+                    DataTable dt3 = OptionData.ExSQLReDr("select * from user where UserID='"+dt2.Rows[l]["Use_UserID"]+"'");
+                    DataRow dtr1 = dt3.NewRow();
+                    dtr1 = dt3.Rows[0];
+                    FriendList.Group[i].Friend[l].NickName = dtr1["UserNickName"].ToString();
+                    FriendList.Group[i].Friend[l].UserID = dtr1["UserID"].ToString();
+                    FriendList.Group[i].Friend[l].AlternateName = dt2.Rows[l]["AlternateName"].ToString() ;
+                    FriendList.Group[i].Friend[l].UserPersonalMessage = dtr1["UserPersonalMessage"].ToString();
+                }
+                loginmsg.FriendList = FriendList;
+                msg.sendKind = SendKind.SendCommand;
+                msg.msgCommand = MsgCommand.GetFriendList;
+                msg.Data = new ClassSerializers().SerializeBinary(loginmsg).ToArray();
+                SendMsgToOne(ip, port, msg);
+            }
+
+
+        }
         /// <summary>
         /// 用户登录
         /// </summary>
@@ -187,7 +231,7 @@ namespace IM_Server
         /// <param name="state"></param>
         private void UserLogin(ClassMsg msg, IPAddress ip, int port, int state)
         {
-             
+
             LoginMsg loginmsg = (LoginMsg)new ClassSerializers().DeSerializeBinary(new MemoryStream(msg.Data));
             ClassOptionData OptionData = new ClassOptionData();//创建并引用ClassOptionData
             MsgCommand msgState = msg.msgCommand;   //获取接收消息的命令
@@ -201,10 +245,10 @@ namespace IM_Server
 
             if (DataReader.Rows.Count != 0)//当DataReader中有记录信息时
             {
-                
+
                 string ID = DataReader.Rows[0]["UserID"].ToString();//获取第一条记录中的ID字段值
                 //修改当前记录的标识为上线状态
-                OptionData.ExSQL("Update tb_CurreneyUser Set Sign = " + Convert.ToString((int)(MsgCommand.Logined)) + ",IP = " + "'" + vIP + "',Port = " + "'" + port.ToString() + "'" + " Where ID = " + ID);
+                OptionData.ExSQL("Update CurreneyUser Set Sign = " + Convert.ToString((int)(MsgCommand.Logined)) + ",IP = " + "'" + vIP + "',Port = " + "'" + port.ToString() + "'" + " Where ID = " + ID);
                 msg.msgCommand = MsgCommand.Logined;//设置为上线命令
                 msg.SID = ID;//用户ID值
                 SendMsgToOne(ip, port, msg);//将消息返回给发送用户
@@ -215,7 +259,8 @@ namespace IM_Server
                 SendMsgToOne(ip, port, msg);
             }
             OptionData.Dispose();
-            UpdateUser();//更新用户列表
+            LoadUsrLst();
+            //UpdateUser();//更新用户列表
         }
         /// <summary>
         /// 用户注册
@@ -281,7 +326,7 @@ namespace IM_Server
                 Users.add(UserItem);                                       //将单用户信息添加到用户列表中
                 i++;
             }
-            
+
             BinaryFormatter serializer = new BinaryFormatter();
             MemoryStream memStream = new MemoryStream();      //创建一个内存流存储区
             serializer.Serialize(memStream, Users);         //将对象序列化为二进制流
@@ -290,10 +335,10 @@ namespace IM_Server
             //查找当前已上线的用户
             DataReader = OptionData.ExSQLReDr("Select * From CurreneyUser Where Sign = " + MsgCommand.Logined);
             i = 0;
-            while (DataReader.Rows.Count==i)//向所有上线用户发送用户列表
+            while (DataReader.Rows.Count == i)//向所有上线用户发送用户列表
             {
 
-                udpSocket1.Send(IPAddress.Parse(DataReader.Rows[i]["IP"].ToString()),Convert.ToInt16( DataReader.Rows[i]["Port"]), new ClassSerializers().SerializeBinary(msg).ToArray());
+                udpSocket1.Send(IPAddress.Parse(DataReader.Rows[i]["IP"].ToString()), Convert.ToInt16(DataReader.Rows[i]["Port"]), new ClassSerializers().SerializeBinary(msg).ToArray());
                 i++;
             }
             OptionData.Dispose();
@@ -332,7 +377,7 @@ namespace IM_Server
         {
             udpSocket1.Active = false;
             ClassOptionData OptionData = new ClassOptionData();
-            OptionData.ExSQL("Update tb_CurreneyUser Set Sign =12 Where ID >0");
+            OptionData.ExSQL("Update CurreneyUser Set Sign =12 Where ID >0");
             OptionData.Dispose();
         }
 
@@ -370,14 +415,15 @@ namespace IM_Server
                 msg.msgID = "Up";
             msg.msgCommand = MsgCommand.UpdateState;
             int i = 0;
-            while (DataReader.Rows.Count==i)
+            while (DataReader.Rows.Count == i)
             {
                 udpSocket1.Send(IPAddress.Parse(DataReader.Rows[i]["IP"].ToString()),
-                        Convert.ToInt16( DataReader.Rows[i]["Port"]), new ClassSerializers().SerializeBinary(msg).ToArray());
+                        Convert.ToInt16(DataReader.Rows[i]["Port"]), new ClassSerializers().SerializeBinary(msg).ToArray());
                 i++;
             }
             OptionData.Dispose();
-            UpdateUser();
+            LoadUsrLst();
+            //UpdateUser();
         }
 
         private void 推出ToolStripMenuItem_Click(object sender, EventArgs e)
